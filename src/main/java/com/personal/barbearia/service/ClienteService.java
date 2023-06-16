@@ -17,21 +17,21 @@ public class ClienteService {
     }
 
     public List<ClienteModel> listar() {
-        return this.clienteRepository.findAll();
+        return clienteRepository.findAll();
     }
 
     public ClienteModel pegarUm(UUID id) {
-        return this.clienteRepository.findById(id)
+        return clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Erro"));
     }
 
     public ClienteModel salvar(ClienteModel clienteModel) {
-        return this.clienteRepository.save(clienteModel);
+        return clienteRepository.save(clienteModel);
     }
 
     public void deletar(UUID id) {
-        this.clienteRepository.delete(
-                this.clienteRepository.findById(id)
+        clienteRepository.delete(
+                clienteRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Erro")));
     }
 

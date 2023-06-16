@@ -1,6 +1,6 @@
 package com.personal.barbearia.controller;
 
-import com.personal.barbearia.dtos.ClienteRecordDTO;
+import com.personal.barbearia.dto.ClienteRecordDTO;
 import com.personal.barbearia.model.ClienteModel;
 import com.personal.barbearia.service.ClienteService;
 import jakarta.validation.Valid;
@@ -27,9 +27,9 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteModel>> listarClientes() {
-        List<ClienteModel> listaCliente = clienteService.listar();
-        if(!listaCliente.isEmpty()) {
-            for(ClienteModel cliente : listaCliente) {
+        List<ClienteModel> listaClientes = clienteService.listar();
+        if(!listaClientes.isEmpty()) {
+            for(ClienteModel cliente : listaClientes) {
                 UUID id = cliente.getId();
                 cliente.add(linkTo(methodOn(ClienteController.class).pegarCliente(id)).withSelfRel());
             }
@@ -46,9 +46,9 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<ClienteModel> salvarCliente(@RequestBody @Valid ClienteRecordDTO clienteRecordDTO) {
-        var clienteModel = new ClienteModel();
-        BeanUtils.copyProperties(clienteRecordDTO, clienteModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvar(clienteModel));
+        var cliente = new ClienteModel();
+        BeanUtils.copyProperties(clienteRecordDTO, cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvar(cliente));
     }
 
     @DeleteMapping("id/{id}")
@@ -59,8 +59,8 @@ public class ClienteController {
 
     @PutMapping("id/{id}")
     public ResponseEntity<ClienteModel> atualizarCliente(@PathVariable UUID id, @RequestBody @Valid ClienteRecordDTO clienteRecordDTO) {
-        ClienteModel clienteSelecionado = clienteService.pegarUm(id);
-        BeanUtils.copyProperties(clienteRecordDTO, clienteSelecionado);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(clienteService.salvar(clienteSelecionado));
+        ClienteModel cliente = clienteService.pegarUm(id);
+        BeanUtils.copyProperties(clienteRecordDTO, cliente);
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.salvar(cliente));
     }
 }

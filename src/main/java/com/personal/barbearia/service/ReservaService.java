@@ -17,30 +17,21 @@ public class ReservaService {
     }
 
     public List<ReservaModel> listar() {
-        return this.reservaRepository.findAll();
+        return reservaRepository.findAll();
     }
 
     public ReservaModel pegarUma(UUID id) {
-        return this.reservaRepository.findById(id)
+        return reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Erro"));
     }
 
     public ReservaModel salvar(ReservaModel reservaModel) {
-        return this.reservaRepository.save(reservaModel);
+        return reservaRepository.save(reservaModel);
     }
 
     public void deletar(UUID id) {
-        this.reservaRepository.delete(
-                this.reservaRepository.findById(id)
+        reservaRepository.delete(
+                reservaRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Erro")));
-    }
-
-    public void atualizar(UUID id, ReservaModel reservaModel) {
-        ReservaModel reservaModelSelecionada = this.reservaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Erro"));
-
-       reservaModel.setId(reservaModelSelecionada.getId());
-
-        this.reservaRepository.save(reservaModel);
     }
 }

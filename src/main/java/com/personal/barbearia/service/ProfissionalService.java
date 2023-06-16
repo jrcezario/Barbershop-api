@@ -17,31 +17,21 @@ public class ProfissionalService {
     }
 
     public List<ProfissionalModel> listar() {
-        return this.profissionalRepository.findAll();
+        return profissionalRepository.findAll();
     }
 
     public ProfissionalModel pegarUm(UUID id) {
-        return this.profissionalRepository.findById(id)
+        return profissionalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Erro"));
     }
 
     public ProfissionalModel salvar(ProfissionalModel profissionalModel) {
-        return this.profissionalRepository.save(profissionalModel);
+        return profissionalRepository.save(profissionalModel);
     }
 
     public void deletar(UUID id) {
-        this.profissionalRepository.delete(
-                this.profissionalRepository.findById(id)
+        profissionalRepository.delete(
+                profissionalRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Erro")));
-    }
-
-    public void atualizar(UUID id, ProfissionalModel profissionalModel) {
-        ProfissionalModel profissionalModelSelecionado = this.profissionalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Erro"));
-
-        profissionalModel.setId(profissionalModelSelecionado.getId());
-
-        this.profissionalRepository.save(profissionalModel);
-
     }
 }
