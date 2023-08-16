@@ -1,27 +1,31 @@
 package com.personal.barbearia.mappers;
 
-import com.personal.barbearia.dtos.request.ServicoDtoRequest;
-import com.personal.barbearia.dtos.response.ServicoDtoResponse;
-import com.personal.barbearia.models.ServicoModel;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.personal.barbearia.dtos.ServicoDTO;
+import com.personal.barbearia.models.Servico;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ServicoMapper {
 
-    @Autowired
-    ModelMapper modelMapper;
-
-    public ServicoModel toServicoModel(ServicoDtoRequest servicoDTORequest) {
-        return modelMapper.map(servicoDTORequest, ServicoModel.class);
+    public ServicoDTO toDTO(Servico servico) {
+        if(servico == null) {
+            return null;
+        }
+        return new ServicoDTO(servico.getId(), servico.getNome(), servico.getValor(), servico.getDescricao());
     }
 
-    public ServicoDtoResponse toServicoDtoResponse(ServicoModel servicoModel) {
-        return modelMapper.map(servicoModel, ServicoDtoResponse.class);
-    }
+    public Servico toEntity(ServicoDTO servicoDTO) {
+        if(servicoDTO == null) {
+            return null;
+        }
 
-    public void toCopyProperties(ServicoDtoRequest servicoDTORequest, ServicoModel servico) {
-        modelMapper.map(servicoDTORequest, servico);
+        Servico servico = new Servico();
+        if(servicoDTO.id() != null) {
+            servico.setId(servicoDTO.id());
+        }
+        servico.setNome(servicoDTO.nome());
+        servico.setValor(servicoDTO.valor());
+        servico.setDescricao(servicoDTO.descricao());
+        return servico;
     }
 }

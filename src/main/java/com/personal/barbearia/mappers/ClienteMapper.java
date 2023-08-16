@@ -1,27 +1,30 @@
 package com.personal.barbearia.mappers;
 
-import com.personal.barbearia.dtos.request.ClienteDtoRequest;
-import com.personal.barbearia.dtos.response.ClienteDtoResponse;
-import com.personal.barbearia.models.ClienteModel;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.personal.barbearia.dtos.ClienteDTO;
+import com.personal.barbearia.models.Cliente;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClienteMapper {
 
-    @Autowired
-    ModelMapper modelMapper;
-
-    public ClienteModel toClienteModel(ClienteDtoRequest clienteDTORequest) {
-        return modelMapper.map(clienteDTORequest, ClienteModel.class);
+    public ClienteDTO toDTO(Cliente cliente) {
+        if(cliente == null) {
+            return null;
+        }
+        return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getTelefone());
     }
 
-    public ClienteDtoResponse toClienteDtoResponse(ClienteModel clienteModel) {
-        return modelMapper.map(clienteModel, ClienteDtoResponse.class);
-    }
+    public Cliente toEntity(ClienteDTO clienteDTO) {
+        if(clienteDTO == null) {
+            return null;
+        }
 
-    public void toCopyProperties(ClienteDtoRequest clienteDTORequest, ClienteModel cliente) {
-        modelMapper.map(clienteDTORequest, cliente);
+        Cliente cliente = new Cliente();
+        if(clienteDTO.id() != null) {
+            cliente.setId(clienteDTO.id());
+        }
+        cliente.setNome(clienteDTO.nome());
+        cliente.setTelefone(clienteDTO.telefone());
+        return cliente;
     }
 }

@@ -1,29 +1,39 @@
 package com.personal.barbearia.mappers;
 
-import com.personal.barbearia.dtos.request.ReservaDtoRequest;
-import com.personal.barbearia.dtos.response.ReservaDtoResponse;
-import com.personal.barbearia.models.ReservaModel;
-import lombok.Getter;
-import lombok.Setter;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.personal.barbearia.dtos.ReservaDTO;
+import com.personal.barbearia.models.Reserva;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReservaMapper {
 
-    @Autowired
-    ModelMapper modelMapper;
-
-    public ReservaModel toReservaModel(ReservaDtoRequest reservaDTORequest) {
-        return modelMapper.map(reservaDTORequest, ReservaModel.class);
+    public ReservaDTO toDTO(Reserva reserva) {
+        if(reserva == null) {
+            return null;
+        }
+        return new ReservaDTO(
+                reserva.getId(),
+                reserva.getCliente(),
+                reserva.getDataReserva(),
+                reserva.getHoraReserva(),
+                reserva.getProfissional(),
+                reserva.getDescricao());
     }
 
-    public ReservaDtoResponse toReservaDtoResponse(ReservaModel reservaModel) {
-        return modelMapper.map(reservaModel, ReservaDtoResponse.class);
-    }
+    public Reserva toEntity(ReservaDTO reservaDTO) {
+        if(reservaDTO == null) {
+            return null;
+        }
 
-    public void toCopyProperties(ReservaDtoRequest reservaDTORequest, ReservaModel reserva) {
-        modelMapper.map(reservaDTORequest, reserva);
+        Reserva reserva = new Reserva();
+        if(reservaDTO.id() != null) {
+            reserva.setId(reservaDTO.id());
+        }
+        reserva.setCliente(reservaDTO.cliente());
+        reserva.setDataReserva(reservaDTO.dataReserva());
+        reserva.setHoraReserva(reservaDTO.horaReserva());
+        reserva.setProfissional(reservaDTO.profissional());
+        reserva.setDescricao(reservaDTO.descricao());
+        return reserva;
     }
 }
