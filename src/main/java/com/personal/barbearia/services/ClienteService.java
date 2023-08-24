@@ -23,31 +23,31 @@ public class ClienteService {
         this.clienteMapper = clienteMapper;
     }
 
-    public List<ClienteDTO> listar() {
+    public List<ClienteDTO> list() {
         return clienteRepository.findAll()
                 .stream()
                 .map(cliente -> clienteMapper.toDTO(cliente))
                 .collect(Collectors.toList());
     }
 
-    public ClienteDTO pegarUm(UUID id) {
+    public ClienteDTO getOne(UUID id) {
         return clienteRepository.findById(id)
                 .map(cliente -> clienteMapper.toDTO(cliente))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.CLIENTE_NAO_ENCONTRADO));
     }
 
-    public ClienteDTO salvar(ClienteDTO clienteDTO) {
+    public ClienteDTO create(ClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toEntity(clienteDTO);
         return clienteMapper.toDTO(clienteRepository.save(cliente));
     }
 
-    public void deletar(UUID id) {
+    public void delete(UUID id) {
         clienteRepository.delete(
                 clienteRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.CLIENTE_NAO_ENCONTRADO)));
     }
 
-    public ClienteDTO atualizar(UUID id, ClienteDTO clienteDTO) {
+    public ClienteDTO update(UUID id, ClienteDTO clienteDTO) {
         return clienteRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setNome(clienteDTO.nome());

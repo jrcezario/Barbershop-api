@@ -23,31 +23,31 @@ public class ProfissionalService {
         this.profissionalMapper = profissionalMapper;
     }
 
-    public List<ProfissionalDTO> listar() {
+    public List<ProfissionalDTO> list() {
         return profissionalRepository.findAll()
                 .stream()
                 .map(profissional -> profissionalMapper.toDTO(profissional))
                 .collect(Collectors.toList());
     }
 
-    public ProfissionalDTO pegarUm(UUID id) {
+    public ProfissionalDTO getOne(UUID id) {
         return profissionalRepository.findById(id)
                 .map(profissional -> profissionalMapper.toDTO(profissional))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.PROFISSIONAL_NAO_ENCONTRADO));
     }
 
-    public ProfissionalDTO salvar(ProfissionalDTO profissionalDTO) {
+    public ProfissionalDTO create(ProfissionalDTO profissionalDTO) {
         Profissional profissional = profissionalMapper.toEntity(profissionalDTO);
         return profissionalMapper.toDTO(profissionalRepository.save(profissional));
     }
 
-    public void deletar(UUID id) {
+    public void delete(UUID id) {
         profissionalRepository.delete(
                 profissionalRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.PROFISSIONAL_NAO_ENCONTRADO)));
     }
 
-    public ProfissionalDTO atualizar(UUID id, ProfissionalDTO profissionalDTO) {
+    public ProfissionalDTO update(UUID id, ProfissionalDTO profissionalDTO) {
         return profissionalRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setNome(profissionalDTO.nome());

@@ -24,31 +24,31 @@ public class ReservaService {
         this.reservaMapper = reservaMapper;
     }
 
-    public List<ReservaDTO> listar() {
+    public List<ReservaDTO> list() {
         return reservaRepository.findAll()
                 .stream()
                 .map(reserva -> reservaMapper.toDTO(reserva))
                 .collect(Collectors.toList());
     }
 
-    public ReservaDTO pegarUma(UUID id) {
+    public ReservaDTO getOne(UUID id) {
         return reservaRepository.findById(id)
                 .map(reserva -> reservaMapper.toDTO(reserva))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.RESERVA_NAO_ENCONTRADA));
     }
 
-    public ReservaDTO salvar(ReservaDTO reservaDTO) {
+    public ReservaDTO create(ReservaDTO reservaDTO) {
         Reserva reserva = reservaMapper.toEntity(reservaDTO);
         return reservaMapper.toDTO(reservaRepository.save(reserva));
     }
 
-    public void deletar(UUID id) {
+    public void delete(UUID id) {
         reservaRepository.delete(
                 reservaRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.RESERVA_NAO_ENCONTRADA)));
     }
 
-    public ReservaDTO atualizar(UUID id, ReservaDTO reservaDTO) {
+    public ReservaDTO update(UUID id, ReservaDTO reservaDTO) {
         return reservaRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setCliente(reservaDTO.cliente());

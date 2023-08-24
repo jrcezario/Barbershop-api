@@ -21,31 +21,31 @@ public class ClienteController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ClienteDTO> listarClientes() {
-        return clienteService.listar();
+    public List<ClienteDTO> clienteList() {
+        return clienteService.list();
     }
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ClienteDTO pegarCliente(@PathVariable UUID id) {
-        return clienteService.pegarUm(id);
+    public ClienteDTO getCliente(@PathVariable UUID id) {
+        return clienteService.getOne(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClienteDTO salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
-        return clienteService.salvar(clienteDTO);
+    public ClienteDTO createCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
+        return clienteService.create(clienteDTO);
     }
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirCliente(@PathVariable UUID id) {
-        clienteService.deletar(id);
+    public void deleteCliente(@PathVariable UUID id) {
+        clienteService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ClienteDTO atualizarCliente(@PathVariable UUID id, @RequestBody @Valid ClienteDTO clienteDTO) {
-       return clienteService.atualizar(id, clienteDTO);
+    public ClienteDTO updateCliente(@PathVariable UUID id, @RequestBody @Valid ClienteDTO clienteDTO) {
+       return clienteService.update(id, clienteDTO);
     }
 }

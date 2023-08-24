@@ -23,31 +23,31 @@ public class ServicoService {
         this.servicoMapper = servicoMapper;
     }
 
-    public List<ServicoDTO> listar() {
+    public List<ServicoDTO> list() {
         return servicoRepository.findAll()
                 .stream()
                 .map(servico -> servicoMapper.toDTO(servico))
                 .collect(Collectors.toList());
     }
 
-    public ServicoDTO pegarUm(UUID id) {
+    public ServicoDTO getOne(UUID id) {
         return servicoRepository.findById(id)
                 .map(servico -> servicoMapper.toDTO(servico))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.SERVICO_NAO_ENCONTRADO));
     }
 
-    public ServicoDTO salvar(ServicoDTO servicoDTO) {
+    public ServicoDTO create(ServicoDTO servicoDTO) {
         Servico servico = servicoMapper.toEntity(servicoDTO);
         return servicoMapper.toDTO(servicoRepository.save(servico));
     }
 
-    public void deletar(UUID id) {
+    public void delete(UUID id) {
         servicoRepository.delete(
                 servicoRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.SERVICO_NAO_ENCONTRADO)));
     }
 
-    public ServicoDTO atualizar(UUID id, ServicoDTO servicoDTO) {
+    public ServicoDTO update(UUID id, ServicoDTO servicoDTO) {
         return servicoRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setNome(servicoDTO.nome());

@@ -21,31 +21,31 @@ public class ReservaController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ReservaDTO> listarReservas() {
-        return reservaService.listar();
+    public List<ReservaDTO> reservaList() {
+        return reservaService.list();
     }
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO pegarReserva(@PathVariable UUID id) {
-        return reservaService.pegarUma(id);
+    public ReservaDTO getReserva(@PathVariable UUID id) {
+        return reservaService.getOne(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ReservaDTO salvarReserva(@RequestBody @Valid ReservaDTO reservaDTO) {
-       return reservaService.salvar(reservaDTO);
+    public ReservaDTO createReserva(@RequestBody @Valid ReservaDTO reservaDTO) {
+       return reservaService.create(reservaDTO);
     }
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirReserva(@PathVariable UUID id) {
-        reservaService.deletar(id);
+    public void deleteReserva(@PathVariable UUID id) {
+        reservaService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO atualizarReserva(@PathVariable UUID id, @RequestBody @Valid ReservaDTO reservaDTO) {
-        return reservaService.atualizar(id, reservaDTO);
+    public ReservaDTO updateReserva(@PathVariable UUID id, @RequestBody @Valid ReservaDTO reservaDTO) {
+        return reservaService.update(id, reservaDTO);
     }
 }

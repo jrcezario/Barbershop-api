@@ -21,31 +21,31 @@ public class ProfissionalController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProfissionalDTO> listarProfissionais() {
-        return profissionalService.listar();
+    public List<ProfissionalDTO> profissionalList() {
+        return profissionalService.list();
     }
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProfissionalDTO pegarProfissional(@PathVariable UUID id) {
-        return profissionalService.pegarUm(id);
+    public ProfissionalDTO getProfissional(@PathVariable UUID id) {
+        return profissionalService.getOne(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProfissionalDTO salvarProfissional(@RequestBody @Valid ProfissionalDTO profissionalDTO) {
-        return profissionalService.salvar(profissionalDTO);
+    public ProfissionalDTO createProfissional(@RequestBody @Valid ProfissionalDTO profissionalDTO) {
+        return profissionalService.create(profissionalDTO);
     }
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirProfissional(@PathVariable UUID id) {
-        profissionalService.deletar(id);
+    public void deleteProfissional(@PathVariable UUID id) {
+        profissionalService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProfissionalDTO atualizarProfissional(@PathVariable UUID id, @RequestBody @Valid ProfissionalDTO profissionalDTO) {
-       return profissionalService.atualizar(id, profissionalDTO);
+    public ProfissionalDTO updateProfissional(@PathVariable UUID id, @RequestBody @Valid ProfissionalDTO profissionalDTO) {
+       return profissionalService.update(id, profissionalDTO);
     }
 }

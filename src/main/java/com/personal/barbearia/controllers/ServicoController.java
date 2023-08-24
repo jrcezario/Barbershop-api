@@ -21,31 +21,31 @@ public class ServicoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ServicoDTO> listarServicos() {
-       return servicoService.listar();
+    public List<ServicoDTO> servicoList() {
+       return servicoService.list();
     }
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ServicoDTO pegarServico(@PathVariable UUID id) {
-        return servicoService.pegarUm(id);
+    public ServicoDTO getServico(@PathVariable UUID id) {
+        return servicoService.getOne(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ServicoDTO salvarServico(@RequestBody @Valid ServicoDTO servicoDTO) {
-        return servicoService.salvar(servicoDTO);
+    public ServicoDTO createServico(@RequestBody @Valid ServicoDTO servicoDTO) {
+        return servicoService.create(servicoDTO);
     }
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirServico(@PathVariable UUID id) {
-        servicoService.deletar(id);
+    public void deleteServico(@PathVariable UUID id) {
+        servicoService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ServicoDTO atualizarServico(@PathVariable UUID id, @RequestBody @Valid ServicoDTO servicoDTO) {
-       return servicoService.atualizar(id, servicoDTO);
+    public ServicoDTO updateServico(@PathVariable UUID id, @RequestBody @Valid ServicoDTO servicoDTO) {
+       return servicoService.update(id, servicoDTO);
     }
 }
