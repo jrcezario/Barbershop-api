@@ -2,30 +2,20 @@ package com.personal.barbearia.mappers;
 
 import com.personal.barbearia.dtos.ServicoDTO;
 import com.personal.barbearia.models.Servico;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-public class ServicoMapper {
+@Mapper
+public interface IServicoMapper {
 
-    public ServicoDTO toDTO(Servico servico) {
-        if(servico == null) {
-            return null;
-        }
-        return new ServicoDTO(servico.getId(), servico.getNome(), servico.getValor(), servico.getDescricao());
-    }
+    @Mapping(target = "nomeServico", source = "nome")
+    @Mapping(target = "valorServico", source = "valor")
+    @Mapping(target = "descricaoServico", source = "descricao")
+    ServicoDTO toServicoDTO(Servico servico);
 
-    public Servico toEntity(ServicoDTO servicoDTO) {
-        if(servicoDTO == null) {
-            return null;
-        }
-
-        Servico servico = new Servico();
-        if(servicoDTO.id() != null) {
-            servico.setId(servicoDTO.id());
-        }
-        servico.setNome(servicoDTO.nome());
-        servico.setValor(servicoDTO.valor());
-        servico.setDescricao(servicoDTO.descricao());
-        return servico;
-    }
+    @Mapping(target = "nome", source = "nomeServico")
+    @Mapping(target = "valor", source = "valorServico")
+    @Mapping(target = "descricao", source = "descricaoServico")
+    @Mapping(target = "status", ignore = true)
+    Servico toServicoEntity(ServicoDTO servicoDTO);
 }

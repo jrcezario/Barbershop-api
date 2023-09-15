@@ -2,30 +2,19 @@ package com.personal.barbearia.mappers;
 
 import com.personal.barbearia.dtos.ProfissionalDTO;
 import com.personal.barbearia.models.Profissional;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class ProfissionalMapper {
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface IProfissionalMapper {
 
-    public ProfissionalDTO toDTO(Profissional profissional) {
-        if(profissional == null) {
-            return null;
-        }
-        return new ProfissionalDTO(profissional.getId(), profissional.getNome(), profissional.getTelefone(), profissional.getEspecialidade());
-    }
+    @Mapping(target = "nomeProfissional", source = "nome")
+    @Mapping(target = "telefoneProfissional", source = "telefone")
+    ProfissionalDTO toProfissionalDTO(Profissional profissional);
 
-    public Profissional toEntity(ProfissionalDTO profissionalDTO) {
-        if(profissionalDTO == null) {
-            return null;
-        }
-
-        Profissional profissional = new Profissional();
-        if(profissionalDTO.id() != null) {
-            profissional.setId(profissionalDTO.id());
-        }
-        profissional.setNome(profissionalDTO.nome());
-        profissional.setTelefone(profissionalDTO.telefone());
-        profissional.setEspecialidade(profissionalDTO.especialidade());
-        return profissional;
-    }
+    @Mapping(target = "nome", source = "nomeProfissional")
+    @Mapping(target = "telefone", source = "telefoneProfissional")
+    @Mapping(target = "status", ignore = true)
+    Profissional toProfissionalEntity(ProfissionalDTO profissionalDTO);
 }

@@ -1,59 +1,60 @@
-package com.personal.barbearia.services;
+package com.personal.barbearia.services.impl;
 
 import com.personal.barbearia.dtos.ProfissionalDTO;
 import com.personal.barbearia.enums.TabelaDeErros;
 import com.personal.barbearia.exceptions.ErroDeNegocioException;
-import com.personal.barbearia.mappers.ProfissionalMapper;
+import com.personal.barbearia.mappers.IProfissionalMapper;
 import com.personal.barbearia.models.Profissional;
 import com.personal.barbearia.repositories.ProfissionalRepository;
+import com.personal.barbearia.services.IProfissionalService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class ProfissionalService {
+@RequiredArgsConstructor
+public class ProfissionalServiceImpl implements IProfissionalService {
 
-    private final ProfissionalRepository profissionalRepository;
-    private final ProfissionalMapper profissionalMapper;
+    ProfissionalRepository profissionalRepository;
+    IProfissionalMapper profissionalMapper;
 
-    public ProfissionalService(ProfissionalRepository profissionalRepository, ProfissionalMapper profissionalMapper) {
-        this.profissionalRepository = profissionalRepository;
-        this.profissionalMapper = profissionalMapper;
-    }
-
+    @Override
     public List<ProfissionalDTO> list() {
         return profissionalRepository.findAll()
                 .stream()
-                .map(profissional -> profissionalMapper.toDTO(profissional))
+                .map(profissional -> profissionalMapper.toProfissionalDTO(profissional))
                 .collect(Collectors.toList());
     }
 
-    public ProfissionalDTO getOne(UUID id) {
+    @Override
+    public ProfissionalDTO getOne(Long id) {
         return profissionalRepository.findById(id)
-                .map(profissional -> profissionalMapper.toDTO(profissional))
+                .map(profissional -> profissionalMapper.toProfissionalDTO(profissional))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.PROFISSIONAL_NAO_ENCONTRADO));
     }
 
+    @Override
     public ProfissionalDTO create(ProfissionalDTO profissionalDTO) {
-        Profissional profissional = profissionalMapper.toEntity(profissionalDTO);
-        return profissionalMapper.toDTO(profissionalRepository.save(profissional));
+        Profissional profissional = profissionalMapper.toProfissionalEntity(profissionalDTO);
+        return profissionalMapper.toProfissionalDTO(profissionalRepository.save(profissional));
     }
 
-    public void delete(UUID id) {
+    @Override
+    public void delete(Long id) {
         profissionalRepository.delete(
                 profissionalRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.PROFISSIONAL_NAO_ENCONTRADO)));
     }
 
-    public ProfissionalDTO update(UUID id, ProfissionalDTO profissionalDTO) {
+    @Override
+    public ProfissionalDTO update(Long id, ProfissionalDTO profissionalDTO) {
         return profissionalRepository.findById(id)
                 .map(recordFound -> {
-                    recordFound.setNome(profissionalDTO.nome());
-                    recordFound.setTelefone(profissionalDTO.telefone());
-                    recordFound.setEspecialidade(profissionalDTO.especialidade());
-                    return profissionalMapper.toDTO(profissionalRepository.save(recordFound));
+                    recordFound.setNome(profissionalDTO.nomeProfissional());
+                    recordFound.setTelefone(profissionalDTO.telefoneProfissional());
+                    return profissionalMapper.toProfissionalDTO(profissionalRepository.save(recordFound));
                 }).orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.PROFISSIONAL_NAO_ENCONTRADO));
     }
 }

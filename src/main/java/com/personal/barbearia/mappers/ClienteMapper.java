@@ -2,29 +2,19 @@ package com.personal.barbearia.mappers;
 
 import com.personal.barbearia.dtos.ClienteDTO;
 import com.personal.barbearia.models.Cliente;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class ClienteMapper {
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface IClienteMapper {
 
-    public ClienteDTO toDTO(Cliente cliente) {
-        if(cliente == null) {
-            return null;
-        }
-        return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getTelefone());
-    }
+    @Mapping(target = "nomeCliente", source = "nome")
+    @Mapping(target = "telefoneCliente", source = "telefone")
+    ClienteDTO toClienteDTO(Cliente cliente);
 
-    public Cliente toEntity(ClienteDTO clienteDTO) {
-        if(clienteDTO == null) {
-            return null;
-        }
-
-        Cliente cliente = new Cliente();
-        if(clienteDTO.id() != null) {
-            cliente.setId(clienteDTO.id());
-        }
-        cliente.setNome(clienteDTO.nome());
-        cliente.setTelefone(clienteDTO.telefone());
-        return cliente;
-    }
+    @Mapping(target = "nome", source = "nomeCliente")
+    @Mapping(target = "telefone", source = "telefoneCliente")
+    @Mapping(target = "status", ignore = true)
+    Cliente toClienteEntity(ClienteDTO clienteDTO);
 }
