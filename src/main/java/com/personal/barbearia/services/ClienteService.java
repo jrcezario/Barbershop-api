@@ -1,13 +1,13 @@
-package com.personal.barbearia.services.impl;
+package com.personal.barbearia.services;
 
 import com.personal.barbearia.dtos.ClienteDTO;
 import com.personal.barbearia.enums.TabelaDeErros;
 import com.personal.barbearia.exceptions.ErroDeNegocioException;
-import com.personal.barbearia.mappers.IClienteMapper;
+import com.personal.barbearia.mappers.ClienteMapper;
 import com.personal.barbearia.models.Cliente;
 import com.personal.barbearia.repositories.ClienteRepository;
-import com.personal.barbearia.services.IClienteService;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ClienteServiceImpl implements IClienteService {
+public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final IClienteMapper clienteMapper;
 
-    @Override
+    ClienteMapper clienteMapper = Mappers.getMapper(ClienteMapper.class);
+
     public List<ClienteDTO> list() {
         return clienteRepository.findAll()
                 .stream()
@@ -28,32 +28,28 @@ public class ClienteServiceImpl implements IClienteService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public ClienteDTO getOne(Long id) {
         return clienteRepository.findById(id)
                 .map(cliente -> clienteMapper.toClienteDTO(cliente))
                 .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.CLIENTE_NAO_ENCONTRADO));
     }
 
-    @Override
     public ClienteDTO create(ClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toClienteEntity(clienteDTO);
         return clienteMapper.toClienteDTO(clienteRepository.save(cliente));
     }
 
-    @Override
     public void delete(Long id) {
         clienteRepository.delete(
                 clienteRepository.findById(id)
                         .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.CLIENTE_NAO_ENCONTRADO)));
     }
 
-    @Override
     public ClienteDTO update(Long id, ClienteDTO clienteDTO) {
         return clienteRepository.findById(id)
                 .map(recordFound -> {
-                    recordFound.setNome(clienteDTO.nomeCliente());
-                    recordFound.setTelefone(clienteDTO.telefoneCliente());
+                    recordFound.setNomeCliente(clienteDTO.nome());
+                    recordFound.setTelefoneCliente(clienteDTO.telefone());
                     return clienteMapper.toClienteDTO(clienteRepository.save(recordFound));
                 }).orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.CLIENTE_NAO_ENCONTRADO));
     }

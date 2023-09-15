@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/reservas")
@@ -27,7 +26,7 @@ public class ReservaController {
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO getReserva(@PathVariable UUID id) {
+    public ReservaDTO getReserva(@PathVariable Long id) {
         return reservaService.getOne(id);
     }
 
@@ -39,13 +38,13 @@ public class ReservaController {
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteReserva(@PathVariable UUID id) {
+    public void deleteReserva(@PathVariable Long id) {
         reservaService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO updateReserva(@PathVariable UUID id, @RequestBody @Valid ReservaDTO reservaDTO) {
+    public ReservaDTO updateReserva(@PathVariable Long id, @RequestBody @Valid ReservaDTO reservaDTO) {
         return reservaService.update(id, reservaDTO);
     }
 }

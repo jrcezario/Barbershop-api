@@ -1,12 +1,11 @@
 package com.personal.barbearia.dtos;
 
+import com.personal.barbearia.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.UUID;
-
 public record ProfissionalDTO(
-        UUID id,
+        Long id,
         @NotBlank(message = "campo obrigatório") String nome,
         @NotBlank(message = "campo obrigatório") String telefone,
-        @NotBlank(message = "campo obrigatório") String especialidade) {
+        Status status) {
 }

@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/profissionais")
@@ -27,7 +26,7 @@ public class ProfissionalController {
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProfissionalDTO getProfissional(@PathVariable UUID id) {
+    public ProfissionalDTO getProfissional(@PathVariable Long id) {
         return profissionalService.getOne(id);
     }
 
@@ -39,13 +38,13 @@ public class ProfissionalController {
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProfissional(@PathVariable UUID id) {
+    public void deleteProfissional(@PathVariable Long id) {
         profissionalService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProfissionalDTO updateProfissional(@PathVariable UUID id, @RequestBody @Valid ProfissionalDTO profissionalDTO) {
+    public ProfissionalDTO updateProfissional(@PathVariable Long id, @RequestBody @Valid ProfissionalDTO profissionalDTO) {
        return profissionalService.update(id, profissionalDTO);
     }
 }
