@@ -12,7 +12,7 @@ import java.time.LocalTime;
 public record ReservaDTO(
         Long id,
         @NotNull(message = "campo obrigatório") Cliente cliente,
-        @NotNull(message = "campo obrigatório") LocalDate data,
+        @NotNull(message = "campo obrigatório") @JsonFormat(pattern = "dd/MM/yyyy") LocalDate data,
         @NotNull(message = "campo obrigatório") @JsonFormat(pattern = "HH:mm") LocalTime hora,
         @NotNull(message = "campo obrigatório") Profissional profissional,
         Status status) {
