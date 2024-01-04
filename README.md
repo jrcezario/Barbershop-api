@@ -1,1 +1,1 @@
-Sistema de uma barbearia desenvolvido utilizando o framework SpringBoot
+Projeto barbearia - API desenvolvida utilizando o framework SpringBoot
