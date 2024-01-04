@@ -1,13 +1,14 @@
 package com.personal.barbearia.services;
 
-import com.personal.barbearia.dtos.ReservaDTO;
-import com.personal.barbearia.enums.TabelaDeErros;
-import com.personal.barbearia.exceptions.ErroDeNegocioException;
+import com.personal.barbearia.dtos.ReservaDto;
+import com.personal.barbearia.dtos.ReservaPageDTO;
+import com.personal.barbearia.exceptions.RecordNotFoundException;
 import com.personal.barbearia.mappers.ReservaMapper;
 import com.personal.barbearia.models.Reserva;
 import com.personal.barbearia.repositories.ReservaRepository;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,40 +20,40 @@ public class ReservaService {
 
     private final ReservaRepository reservaRepository;
 
-    ReservaMapper reservaMapper = Mappers.getMapper(ReservaMapper.class);
-
-    public List<ReservaDTO> list() {
-        return reservaRepository.findAll()
-                .stream()
-                .map(reserva -> reservaMapper.toReservaDTO(reserva))
-                .collect(Collectors.toList());
+    public ReservaPageDTO list(int page, int size) {
+        Page<Reserva> pageReserva = reservaRepository.findAll(PageRequest.of(page, size));
+        List<ReservaDto> reservas = pageReserva.get().map(
+                reserva -> ReservaMapper.INSTANCE.toReservaDto(reserva)
+        ).collect(Collectors.toList());
+        return new ReservaPageDTO(reservas, pageReserva.getTotalElements(), pageReserva.getTotalPages());
     }
 
-    public ReservaDTO getOne(Long id) {
-        return reservaRepository.findById(id)
-                .map(reserva -> reservaMapper.toReservaDTO(reserva))
-                .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.RESERVA_NAO_ENCONTRADA));
+    public ReservaDto getOne(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+        return ReservaMapper.INSTANCE.toReservaDto(reserva);
     }
 
-    public ReservaDTO create(ReservaDTO reservaDTO) {
-        Reserva reserva = reservaMapper.toReservaEntity(reservaDTO);
-        return reservaMapper.toReservaDTO(reservaRepository.save(reserva));
+    public ReservaDto create(ReservaDto reservaDTO) {
+        Reserva reserva = ReservaMapper.INSTANCE.toReservaEntity(reservaDTO);
+        return ReservaMapper.INSTANCE.toReservaDto(reservaRepository.save(reserva));
     }
 
     public void delete(Long id) {
         reservaRepository.delete(
                 reservaRepository.findById(id)
-                        .orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.RESERVA_NAO_ENCONTRADA)));
+                        .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 
-    public ReservaDTO update(Long id, ReservaDTO reservaDTO) {
+    public ReservaDto update(Long id, ReservaDto reservaDTO) {
         return reservaRepository.findById(id)
                 .map(recordFound -> {
+                    Reserva reserva = ReservaMapper.INSTANCE.toReservaEntity(reservaDTO);
                     recordFound.setCliente(reservaDTO.cliente());
-                    recordFound.setDataReserva(reservaDTO.data());
-                    recordFound.setHoraReserva(reservaDTO.hora());
+                    recordFound.setData(reservaDTO.data());
+                    recordFound.setHora(reservaDTO.hora());
                     recordFound.setProfissional(reservaDTO.profissional());
-                    return reservaMapper.toReservaDTO(reservaRepository.save(recordFound));
-                }).orElseThrow(() -> new ErroDeNegocioException(TabelaDeErros.RESERVA_NAO_ENCONTRADA));
+                    return ReservaMapper.INSTANCE.toReservaDto(reservaRepository.save(recordFound));
+                }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 }

@@ -14,9 +14,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "TB_CLIENTES")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-
+@AllArgsConstructor
 //hibernate faz um soft delete, apenas alterando o status do objeto
 @SQLDelete(sql = "UPDATE tb_clientes SET status = 'Inativo' WHERE id = ?")
 //hibernate verifica toda vez q é feito um select no BD e insere a clausula WHERE para filtrar
@@ -26,17 +25,16 @@ public class Cliente implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String nomeCliente;
+    private String nome;
 
     @Column(nullable = false, length = 15, unique = true)
-    private String telefoneCliente;
+    private String telefone;
 
     @Column(nullable = false, length = 10)
     @Convert(converter = StatusConverter.class)
     private Status status = Status.ATIVO;
-
 }

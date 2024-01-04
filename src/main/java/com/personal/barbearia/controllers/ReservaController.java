@@ -1,13 +1,18 @@
 package com.personal.barbearia.controllers;
 
-import com.personal.barbearia.dtos.ReservaDTO;
+import com.personal.barbearia.dtos.ReservaDto;
+import com.personal.barbearia.dtos.ReservaPageDTO;
 import com.personal.barbearia.services.ReservaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Validated
 @RestController
 @RequestMapping("api/reservas")
 public class ReservaController {
@@ -20,31 +25,31 @@ public class ReservaController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ReservaDTO> reservaList() {
-        return reservaService.list();
+    public ReservaPageDTO reservaList(@RequestParam @PositiveOrZero int page, @RequestParam @Positive @Max(100) int size) {
+        return reservaService.list(page, size);
     }
 
     @GetMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO getReserva(@PathVariable Long id) {
+    public ReservaDto getReserva(@PathVariable @NotNull @Positive Long id) {
         return reservaService.getOne(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ReservaDTO createReserva(@RequestBody @Valid ReservaDTO reservaDTO) {
-       return reservaService.create(reservaDTO);
+    public ReservaDto createReserva(@RequestBody @Valid @NotNull ReservaDto reservaDTO) {
+        return reservaService.create(reservaDTO);
     }
 
     @DeleteMapping("id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteReserva(@PathVariable Long id) {
+    public void deleteReserva(@PathVariable @NotNull @Positive Long id) {
         reservaService.delete(id);
     }
 
     @PutMapping("id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReservaDTO updateReserva(@PathVariable Long id, @RequestBody @Valid ReservaDTO reservaDTO) {
+    public ReservaDto updateReserva(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull ReservaDto reservaDTO) {
         return reservaService.update(id, reservaDTO);
     }
 }

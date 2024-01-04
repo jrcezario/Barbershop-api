@@ -26,14 +26,14 @@ public class Profissional implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String nomeProfissional;
+    private String nome;
 
     @Column(nullable = false, length = 15, unique = true)
-    private String telefoneProfissional;
+    private String telefone;
 
     @Column(nullable = false, length = 10)
     @Convert(converter = StatusConverter.class)

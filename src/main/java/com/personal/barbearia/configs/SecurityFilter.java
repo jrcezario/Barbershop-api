@@ -1,6 +1,6 @@
 package com.personal.barbearia.configs;
 
-import com.personal.barbearia.repositories.UsuarioRepository;
+import com.personal.barbearia.repositories.UserRepository;
 import com.personal.barbearia.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,14 +22,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     TokenService tokenService;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
         if(token != null) {
             var login = tokenService.validateToken(token);
-            UserDetails user = usuarioRepository.findByUsername(login);
+            UserDetails user = userRepository.findByUsername(login);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

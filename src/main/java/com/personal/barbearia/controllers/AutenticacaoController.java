@@ -4,7 +4,7 @@ import com.personal.barbearia.dtos.AutenticacaoDTO;
 import com.personal.barbearia.dtos.LoginDTO;
 import com.personal.barbearia.dtos.RegistroDTO;
 import com.personal.barbearia.models.Usuario;
-import com.personal.barbearia.repositories.UsuarioRepository;
+import com.personal.barbearia.repositories.UserRepository;
 import com.personal.barbearia.services.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class AutenticacaoController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UsuarioRepository repository;
+    private UserRepository repository;
 
     @Autowired
     private TokenService tokenService;
